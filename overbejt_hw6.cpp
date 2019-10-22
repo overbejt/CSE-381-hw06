@@ -9,6 +9,18 @@
 
 #include <cctype>
 #include <algorithm>
+#include <ext/stdio_filebuf.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <boost/asio.hpp>
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <iomanip>
+#include <thread>
 
 using namespace std;
 
