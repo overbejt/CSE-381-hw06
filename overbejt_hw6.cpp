@@ -35,6 +35,8 @@ WordMap wordMap;
 
 // Prototyping methods
 void initWordMap();
+void scrapeUrl(char** &list, string url);
+void printCounts(char** &list);
 
 /**
  * This is a helper method that will populate the word map with the data from 
@@ -47,10 +49,6 @@ void initWordMap() {
     while (is >> word) {
         wordMap.insert({word, word});
     }
-    
-    for (const auto ell : wordMap) {
-        cout << ell.first << endl;
-    }
 }  // End of the 'initWordMap' method
 
 
@@ -58,7 +56,10 @@ void initWordMap() {
  * 
  */
 int main(int argc, char** argv) {
+    // Fill the word map
     initWordMap();
+    // Scrape the url
+    // Print out the counts
     return 0;
 }
 
