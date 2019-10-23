@@ -52,6 +52,32 @@ void initWordMap() {
 }  // End of the 'initWordMap' method
 
 
+/**
+ * This is a helper method that will scrape the content from a given Url.  
+ * It will count the words, and it will count the English words.
+ * 
+ * @param list Argv from main, put the counts in the order 
+ *             (word_count English_count).  *Without the parenthesis.
+ * 
+ * @param url A url that needs to be scrapped.
+ */
+void scrapeUrl(char** &list, string url) {
+    
+}  // End of the 'scrapeUrl' method
+
+
+/**
+ * A helper method that will print out all of the counts in the order that the 
+ * url were supplied in.  
+ * 
+ * @param list Argv from main.  It will contain the counts like 
+ *             "word_count English_count".  *Without the quotes.
+ */
+void printCounts(char** &list) {
+    
+}  // End of the 'printCounts' method
+
+
 /*
  * 
  */
