@@ -57,12 +57,11 @@ void initWordMap() {
  * It will count the words, and it will count the English words.
  * 
  * @param list Argv from main, put the counts in the order 
- *             (word_count English_count).  *Without the parenthesis.
+ *             (url word_count English_count).  *Without the parenthesis.
  * 
  * @param url A url that needs to be scrapped.
  */
-void scrapeUrl(char** &list, string url) {
-    
+void scrapeUrl(char** &list, string url) {    
 }  // End of the 'scrapeUrl' method
 
 
@@ -71,10 +70,18 @@ void scrapeUrl(char** &list, string url) {
  * url were supplied in.  
  * 
  * @param list Argv from main.  It will contain the counts like 
- *             "word_count English_count".  *Without the quotes.
+ *             "url word_count English_count".  *Without the quotes.
  */
 void printCounts(char** &list) {
-    
+    for (int i = 2; i < list.size(); i++) {
+        stringstream ss(list[i]);
+        string url;
+        int wordCount, englishCount;
+        ss >> url >> wordCount >> englishCount;
+        cout << "URL: " << url;
+        cout << ", words: " << wordCount;
+        cout << ", English words: " << englishCount << endl;
+    }
 }  // End of the 'printCounts' method
 
 
