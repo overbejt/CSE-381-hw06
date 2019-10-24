@@ -178,13 +178,24 @@ int main(int argc, char** argv) {
     StrVec data;
     // Fill the word map
     initWordMap();
+//    for (size_t i = 0; i < argc; i++) {
+//        cout << argv[i] << endl;
+//    }
     // Scrape the url
     for (size_t i = 2; i < argc; i++) {
+        string meh = argv[i];
         data.push_back(argv[i]);
     }
-    scrapeUrl(data, 2);
-    // Print out the counts
-    printCounts(data);
+    for (auto b : data) {
+        cout << b << endl;
+    }
+//    cout << argv[0] << endl;
+//    cout << argv[1] << endl;
+//    cout << argv[2] << endl;
+    
+//    scrapeUrl(data, 2);
+//    // Print out the counts
+//    printCounts(data);
     return 0;
 }
 

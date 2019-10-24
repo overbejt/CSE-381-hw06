@@ -29,9 +29,9 @@
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"
 1 ex3.html</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" 1 ex3.html</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}"
-1 ex3.html</runcommand>
+        <runcommand>"${OUTPUT_PATH}" 1 ex3.html</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>
