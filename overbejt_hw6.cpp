@@ -7,7 +7,7 @@
  * Created on October 21, 2019, 2:14 PM
  */
 
-#include <boost/asio.hpp>
+#include <boost/asio.hpp> 
 #include <cctype>
 #include <cstdlib>
 #include <algorithm>
@@ -120,6 +120,17 @@ void scrapeUrl(char** &list, string url) {
         // Something went wrong in getting the data from the server.
         std::cout << "Error obtaining data from server.\n";
 //        return 1;  // Unsuccessful run of program (non-zero exit code)
+    }
+    // Iterate through each line in the web page
+    string line;
+    while (stream >> line) {
+        std::replace_if(line.begin(), line.end(), ispunct, ' ');
+        string word;
+        stringstream ss(line);
+        while (ss >> word) {
+            std::transform(word.begin(), word.end(), word.begin(), tolower);
+            
+        }
     }
 }  // End of the 'scrapeUrl' method
 
