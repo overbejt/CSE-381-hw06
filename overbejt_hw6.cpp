@@ -141,7 +141,6 @@ void scrapeUrl(char** &list, string url, int index) {
             }
         }
     }
-    
     // Add the counts to argv
     list[index] += ' ' + words + ' ' + english;
 }  // End of the 'scrapeUrl' method
@@ -174,6 +173,7 @@ int main(int argc, char** argv) {
     // Fill the word map
     initWordMap();
     // Scrape the url
+    scrapeUrl(argv, argv[2], 2);
     // Print out the counts
     return 0;
 }
