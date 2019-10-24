@@ -141,6 +141,9 @@ void scrapeUrl(char** &list, string url, int index) {
             }
         }
     }
+    
+    // Add the counts to argv
+    list[index] += ' ' + words + ' ' + english;
 }  // End of the 'scrapeUrl' method
 
 
