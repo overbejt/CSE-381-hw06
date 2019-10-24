@@ -30,14 +30,17 @@ using namespace boost::asio::ip;
 //  using namespace tcp::iostream;  //
 //  using TcpStreamPtr = std::shared_ptr<tcp::iostream>;
 using WordMap = std::unordered_map<std::string, std::string>;
+using StrVec = std::vector<std::string>;
 
 // Declaring a global variable for the word Map
 WordMap wordMap;
 
 // Prototyping methods
 void initWordMap();
-void scrapeUrl(char** &list, string url, int index);
-void printCounts(int &argc, char** &list);
+void scrapeUrl(StrVec& dat, string url, int index);
+void printCounts(StrVec& dat);
+//  bool setupHttpStream(tcp::iostream& stream, const std::string& path,
+//                     const std::string& host = "ceclnx01.cec.miamioh.edu");
 
 /**
  * Helper method to create an TCP I/O stream to send an HTTP request
@@ -101,6 +104,7 @@ void initWordMap() {
     while (is >> word) {
         wordMap.insert({word, word});
     }
+    cout << "WordMap initialized." << endl;
 }  // End of the 'initWordMap' method
 
 
@@ -113,7 +117,7 @@ void initWordMap() {
  * 
  * @param url A url that needs to be scrapped.
  */
-void scrapeUrl(char** &list, string url, int index) {
+void scrapeUrl(StrVec& list, string url, int index) {
     // local variables
     int words = 0, english = 0;
     tcp::iostream stream;
@@ -142,7 +146,7 @@ void scrapeUrl(char** &list, string url, int index) {
         }
     }
     // Add the counts to argv
-    list[index] += ' ' + words + ' ' + english;
+    list[index-2] += ' ' + words + ' ' + english;
 }  // End of the 'scrapeUrl' method
 
 
@@ -153,8 +157,8 @@ void scrapeUrl(char** &list, string url, int index) {
  * @param list Argv from main.  It will contain the counts like 
  *             "url word_count English_count".  *Without the quotes.
  */
-void printCounts(int &argc, char** &list) {
-    for (int i = 2; i < argc; i++) {
+void printCounts(StrVec& list) {
+    for (size_t i = 2; i < list.size(); i++) {
         stringstream ss(list[i]);
         string url;
         int wordCount, englishCount;
@@ -170,12 +174,13 @@ void printCounts(int &argc, char** &list) {
  * 
  */
 int main(int argc, char** argv) {
+    StrVec data;
     // Fill the word map
     initWordMap();
     // Scrape the url
-    scrapeUrl(argv, argv[2], 2);
+    scrapeUrl(data, argv[2], 2);
     // Print out the counts
-    printCounts(argc, argv);
+    printCounts(data);
     return 0;
 }
 
