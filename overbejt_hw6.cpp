@@ -175,6 +175,7 @@ int main(int argc, char** argv) {
     // Scrape the url
     scrapeUrl(argv, argv[2], 2);
     // Print out the counts
+    printCounts(argc, argv);
     return 0;
 }
 
