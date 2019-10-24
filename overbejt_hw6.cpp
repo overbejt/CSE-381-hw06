@@ -37,7 +37,7 @@ WordMap wordMap;
 
 // Prototyping methods
 void initWordMap();
-void scrapeUrl(char** &list, string url);
+void scrapeUrl(char** &list, string url, int index);
 void printCounts(int &argc, char** &list);
 
 /**
@@ -114,7 +114,9 @@ void initWordMap() {
  * 
  * @param url A url that needs to be scrapped.
  */
-void scrapeUrl(char** &list, string url) {
+void scrapeUrl(char** &list, string url, int index) {
+    // local variables
+    int words = 0, english = 0;
     tcp::iostream stream;
     if (!setupHttpStream(stream, "~raodm/exercise1_numbers.txt")) {
         // Something went wrong in getting the data from the server.
@@ -124,12 +126,18 @@ void scrapeUrl(char** &list, string url) {
     // Iterate through each line in the web page
     string line;
     while (stream >> line) {
+        // Strip out punctuation
         std::replace_if(line.begin(), line.end(), ispunct, ' ');
+        // Iterate through each word in a line
         string word;
         stringstream ss(line);
         while (ss >> word) {
+            // Convert to lowercase
             std::transform(word.begin(), word.end(), word.begin(), tolower);
-            
+            words++;
+            if (wordMap.find(word) != wordMap.end()) {
+                english++;
+            }
         }
     }
 }  // End of the 'scrapeUrl' method
