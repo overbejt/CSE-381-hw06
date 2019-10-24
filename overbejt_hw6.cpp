@@ -37,7 +37,7 @@ WordMap wordMap;
 
 // Prototyping methods
 void initWordMap();
-void scrapeUrl(StrVec& dat, string url, int index);
+void scrapeUrl(StrVec& dat, int index);
 void printCounts(StrVec& dat);
 //  bool setupHttpStream(tcp::iostream& stream, const std::string& path,
 //                     const std::string& host = "ceclnx01.cec.miamioh.edu");
@@ -117,9 +117,10 @@ void initWordMap() {
  * 
  * @param url A url that needs to be scrapped.
  */
-void scrapeUrl(StrVec& list, string url, int index) {
+void scrapeUrl(StrVec& list, int index) {
     // local variables
     int words = 0, english = 0;
+    string url = list.at(index-2);
     tcp::iostream stream;
     // Update path to web page
     string path = "~raodm/cse381/ex6/SlowGet.cgi?file=" + url;
@@ -178,7 +179,10 @@ int main(int argc, char** argv) {
     // Fill the word map
     initWordMap();
     // Scrape the url
-    scrapeUrl(data, argv[2], 2);
+    for (size_t i = 2; i < argc; i++) {
+        data.push_back(argv[i]);
+    }
+    scrapeUrl(data, 2);
     // Print out the counts
     printCounts(data);
     return 0;
