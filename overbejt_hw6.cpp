@@ -23,7 +23,6 @@
 #include <thread>
 #include <unordered_map>
 
-
 // Using namespaces to save screen space 
 using namespace std;
 using namespace boost::asio;
@@ -118,7 +117,9 @@ void scrapeUrl(char** &list, string url, int index) {
     // local variables
     int words = 0, english = 0;
     tcp::iostream stream;
-    if (!setupHttpStream(stream, "~raodm/exercise1_numbers.txt")) {
+    // Update path to web page
+    string path = "~raodm/cse381/ex6/SlowGet.cgi?file=" + url;
+    if (!setupHttpStream(stream, path)) {
         // Something went wrong in getting the data from the server.
         std::cout << "Error obtaining data from server.\n";
 //        return 1;  // Unsuccessful run of program (non-zero exit code)
@@ -127,13 +128,13 @@ void scrapeUrl(char** &list, string url, int index) {
     string line;
     while (stream >> line) {
         // Strip out punctuation
-        std::replace_if(line.begin(), line.end(), ispunct, ' ');
+        std::replace_if(line.begin(), line.end(), ::ispunct, ' ');      
         // Iterate through each word in a line
         string word;
         stringstream ss(line);
         while (ss >> word) {
             // Convert to lowercase
-            std::transform(word.begin(), word.end(), word.begin(), tolower);
+            std::transform(word.begin(), word.end(), word.begin(), ::tolower);
             words++;
             if (wordMap.find(word) != wordMap.end()) {
                 english++;
