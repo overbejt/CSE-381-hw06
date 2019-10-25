@@ -203,7 +203,7 @@ void thrdSet(ThrVec& threads, int interval, int begin) {
     if (interval + begin < data.size()) {
         end = interval + begin;
     } else {
-        end = data.size();
+        end = data.size() - begin;
     }
     // Loop and make threads work
     for (int i = 0; i < end; ++i) {
@@ -224,7 +224,8 @@ void thrdMain(int thrdCnt) {
         ThrVec thrList;
         // Todo: 
         // 1.) Find the interval for each thread to work on.
-        int interval = thrdCnt - 1;
+//        int interval = thrdCnt - 1;
+        int interval = data.size() / thrdCnt;
         // 2.) Loop and thread. 
         int start = 0;
         for (int i = 0; i < thrdCnt; ++i) {
