@@ -40,10 +40,11 @@ StrVec data;
 
 // Prototyping methods
 void initWordMap();
-int scrapeUrl(int index);
+void scrapeUrl(int index);
 void printCounts();
 pair<int, int> countWords(string line);
-void thrdMain();
+void thrdMain(int thrdCnt);
+void thrdSet(ThrVec& threads, int interval, int begin);
 
 /**
  * Helper method to create an TCP I/O stream to send an HTTP request
@@ -117,16 +118,16 @@ void initWordMap() {
  * 
  * @param url A url that needs to be scrapped.
  */
-int scrapeUrl(int index) {
+void scrapeUrl(int index) {
     // local variables
-    string url = data.at(index-2);
+    string url = data.at(index);
     tcp::iostream stream;
     string host = "os1.csi.miamioh.edu";
     string path = "~raodm/cse381/hw6/SlowGet.cgi?file=" + url;
     if (!setupHttpStream(stream, path, host)) {
         // Something went wrong in getting the data from the server.
         std::cout << "Error obtaining data from server.\n";
-        return 1;  // Unsuccessful run of program (non-zero exit code)
+//        return 1;  // Unsuccessful run of program (non-zero exit code)
     }
     // Iterate through each line in the web page
     string line;
@@ -139,9 +140,9 @@ int scrapeUrl(int index) {
         englishCt += counts.second;
     }
     // Concatenate the string containing url and counts
-    data.at(index-2) = "http://" + host + "/" + path + ' ' + 
+    data.at(index) = "http://" + host + "/" + path + ' ' + 
             to_string(wordCt) + ' ' + to_string(englishCt);
-    return 0;
+//    return 0;
 }  // End of the 'scrapeUrl' method
 
 
@@ -189,11 +190,58 @@ pair<int, int> countWords(string line) {
 }  // End of the 'countWords' method
 
 /**
+ * This is a helper method that will iterate tasks to threads.
+ * 
+ * @param interval The interval that this thread will work on.
+ * @param threads A reference to the thread list from  the 'thrdMain' method.
+ * @param begin The index in the StrVec data that this thread begins working on.
+ */
+void thrdSet(ThrVec& threads, int interval, int begin) {
+    cout << "Running thrdSet" << endl;
+    // Avoid index out of bounds exception
+    int end;
+    if (interval + begin < data.size()) {
+        end = interval + begin;
+    } else {
+        end = data.size();
+    }
+    // Loop and make threads work
+    for (int i = 0; i < end; ++i) {
+        cout << "thrdSet i = " << i << endl;
+        threads.push_back(thread(scrapeUrl, (begin + i)));
+    }
+    cout << "Finished thrdSet" << endl;
+}  // End of the 'thrdSet' method
+
+/**
  * A helper method to manage the threads.
+ * 
+ * @param thrdCnt A count of the threads to use.
  */
 void thrdMain(int thrdCnt) {
-    ThrVec thrList;
-//    
+    cout << "Runing thrdMain" << endl;
+    if (thrdCnt > 1) {
+        ThrVec thrList;
+        // Todo: 
+        // 1.) Find the interval for each thread to work on.
+        int interval = thrdCnt - 1;
+        // 2.) Loop and thread. 
+        int start = 0;
+        for (int i = 0; i < thrdCnt; ++i) {
+            thrdSet(thrList, interval, start);
+            start += interval;
+        }
+        // 3.) Join the threads.
+        for (auto& t : thrList) {
+            t.join();
+        }
+    } else {
+        // Scrape the URLs
+        for (int i = 0; i < data.size(); ++i) {
+            scrapeUrl(i);
+        }
+    }
+    cout << "Finished thrdMain" << endl;
 }  // End of the 'thrdMain' method
 
 
@@ -218,10 +266,10 @@ int main(int argc, char** argv) {
     int thrCnt = atoi(argv[1]);
     thrdMain(thrCnt);
     
-    // Scrape the URLs
-    for (int i = 2; i < argc; ++i) {
-        int status = scrapeUrl(i);
-    }
+//    // Scrape the URLs
+//    for (int i = 2; i < argc; ++i) {
+//        int status = scrapeUrl(i);
+//    }
     
     // Print out the counts
     printCounts();
