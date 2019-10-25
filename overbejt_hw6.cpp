@@ -11,9 +11,6 @@
 #include <cctype>
 #include <cstdlib>
 #include <algorithm>
-//  #include <ext/stdio_filebuf.h>
-//  #include <unistd.h>
-//  #include <sys/wait.h>
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -28,8 +25,6 @@
 using namespace std;
 using namespace boost::asio;
 using namespace boost::asio::ip;
-//  using namespace tcp::iostream;  //
-//  using TcpStreamPtr = std::shared_ptr<tcp::iostream>;
 using WordMap = std::unordered_map<std::string, std::string>;
 using StrVec = std::vector<std::string>;
 using ThrVec = std::vector<std::thread>;
