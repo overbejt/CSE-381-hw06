@@ -51,6 +51,8 @@ void thrdSet(ThrVec& threads, int interval, int begin);
  * to a web server and obtain file contents as response.  Note that
  * this method does not process the response. However, it reads and
  * discards the HTTP response headers sent by the server.
+ * 
+ * [This method came directly from exercise 1]
  *
  * @param path The path to the file on the web server to be
  * obtained. E.g. "~raodm/test.html".
@@ -108,7 +110,6 @@ void initWordMap() {
     while (is >> word) {
         wordMap.insert({word, word});
     }
-    cout << "WordMap initialized." << endl;  // Debuging -=-=-=-=-=-=-=-=-=-=-=-
 }  // End of the 'initWordMap' method
 
 
@@ -116,7 +117,7 @@ void initWordMap() {
  * This is a helper method that will scrape the content from a given Url.  
  * It will count the words, and it will count the English words.
  * 
- * @param url A url that needs to be scrapped.
+ * @param index The index of the url that needs to be scrapped.
  */
 void scrapeUrl(int index) {
     // local variables
@@ -127,7 +128,6 @@ void scrapeUrl(int index) {
     if (!setupHttpStream(stream, path, host)) {
         // Something went wrong in getting the data from the server.
         std::cout << "Error obtaining data from server.\n";
-//        return 1;  // Unsuccessful run of program (non-zero exit code)
     }
     // Iterate through each line in the web page
     string line;
@@ -142,7 +142,6 @@ void scrapeUrl(int index) {
     // Concatenate the string containing url and counts
     data.at(index) = "http://" + host + "/" + path + ' ' + 
             to_string(wordCt) + ' ' + to_string(englishCt);
-//    return 0;
 }  // End of the 'scrapeUrl' method
 
 
@@ -154,7 +153,6 @@ void printCounts() {
     for (size_t i = 0; i < data.size(); i++) {
         stringstream ss(data[i]);
         string url, wordCount, englishCount;
-//        int wordCount, englishCount;
         ss >> url >> wordCount >> englishCount;
         cout << "URL: " << url;
         cout << ", words: " << wordCount;
@@ -197,22 +195,14 @@ pair<int, int> countWords(string line) {
  * @param begin The index in the StrVec data that this thread begins working on.
  */
 void thrdSet(ThrVec& threads, int interval, int begin) {
-    cout << "Running thrdSet" << endl;
-    // Avoid index out of bounds exception
+    // Specify the end of the loop
     int end = interval + begin;
-//    if (interval + begin < data.size()) {
-//        end = interval + begin;
-//    } else {
-//        end = data.size() - begin;
-//    }
     // Loop and make threads work
     int increment = 0;
     for (int i = begin; i < end; ++i) {
-        cout << "thrdSet i = " << i << endl;
         threads.push_back(thread(scrapeUrl, (begin + increment)));
         increment++;
     }
-    cout << "Finished thrdSet" << endl;
 }  // End of the 'thrdSet' method
 
 /**
@@ -221,21 +211,19 @@ void thrdSet(ThrVec& threads, int interval, int begin) {
  * @param thrdCnt A count of the threads to use.
  */
 void thrdMain(int thrdCnt) {
-    cout << "Runing thrdMain" << endl;
     if (thrdCnt > 1) {
         ThrVec thrList;
-        // Todo: 
         // 1.) Find the interval for each thread to work on.
-//        int interval = data.size() / thrdCnt - 1;
         int interval = data.size() / thrdCnt;
         int remainder = data.size() % thrdCnt;
         // 2.) Loop and thread. 
         int start = 0;
         for (int i = 0; i < thrdCnt; ++i) {
-//            interval = (i == thrdCnt - 1) ? interval + remainder : interval;
+            // On the last round, include the remainder in the interval
             if (i == thrdCnt - 1) {
                 interval = interval + remainder;
             }
+            // Send the thread to work
             thrdSet(thrList, interval, start);
             start += interval;
         }
@@ -244,12 +232,11 @@ void thrdMain(int thrdCnt) {
             t.join();
         }
     } else {
-        // Scrape the URLs
+        // Scrape the URLs, single thread
         for (int i = 0; i < data.size(); ++i) {
             scrapeUrl(i);
         }
     }
-    cout << "Finished thrdMain" << endl;
 }  // End of the 'thrdMain' method
 
 
@@ -265,20 +252,11 @@ int main(int argc, char** argv) {
         string meh = argv[i];
         data.push_back(argv[i]);
     }
-    // Debuging -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (auto b : data) {
-        cout << b << endl;
-    }
-    
+        
     // Run Thread Main
     int thrCnt = atoi(argv[1]);
     thrdMain(thrCnt);
-    
-//    // Scrape the URLs
-//    for (int i = 2; i < argc; ++i) {
-//        int status = scrapeUrl(i);
-//    }
-    
+        
     // Print out the counts
     printCounts();
     return 0;
