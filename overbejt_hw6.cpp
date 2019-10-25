@@ -22,6 +22,7 @@
 #include <iomanip>
 #include <thread>
 #include <unordered_map>
+#include <utility>
 
 // Using namespaces to save screen space 
 using namespace std;
@@ -32,13 +33,15 @@ using namespace boost::asio::ip;
 using WordMap = std::unordered_map<std::string, std::string>;
 using StrVec = std::vector<std::string>;
 
-// Declaring a global variable for the word Map
+// Declaring a global variables
 WordMap wordMap;
+StrVec data;
 
 // Prototyping methods
 void initWordMap();
-int scrapeUrl(StrVec& dat, int index);
-void printCounts(StrVec& dat);
+int scrapeUrl(int index);
+void printCounts();
+pair<int, int> countWords(string line);
 //  bool setupHttpStream(tcp::iostream& stream, const std::string& path,
 //                     const std::string& host = "ceclnx01.cec.miamioh.edu");
 
@@ -56,7 +59,7 @@ void printCounts(StrVec& dat);
  */
 bool setupHttpStream(tcp::iostream& stream, const std::string& path,
                      const std::string& host = "ceclnx01.miamioh.edu") {
-    cout << "URL: " << host + path << endl;
+    cout << "URL: " << host + path << endl;  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     // Establish a TCP connection to the given web server at port
     // number 80.
     stream.connect(host, "80");
@@ -118,13 +121,10 @@ void initWordMap() {
  * 
  * @param url A url that needs to be scrapped.
  */
-int scrapeUrl(StrVec& list, int index) {
+int scrapeUrl(int index) {
     // local variables
-    int words = 0, english = 0;
-    string url = list.at(index-2);
+    string url = data.at(index-2);
     tcp::iostream stream;
-    // Update path to web page
-//    string path = "~raodm/cse381/ex6/SlowGet.cgi?file=" + url;
     string host = "os1.csi.miamioh.edu";
     string path = "~raodm/cse381/hw6/SlowGet.cgi?file=" + url;
     if (!setupHttpStream(stream, path, host)) {
@@ -134,23 +134,14 @@ int scrapeUrl(StrVec& list, int index) {
     }
     // Iterate through each line in the web page
     string line;
+    pair<int, int> counts;
     while (stream >> line) {
-        // Strip out punctuation
-        std::replace_if(line.begin(), line.end(), ::ispunct, ' ');      
-        // Iterate through each word in a line
-        string word;
-        stringstream ss(line);
-        while (ss >> word) {
-            // Convert to lowercase
-            std::transform(word.begin(), word.end(), word.begin(), ::tolower);
-            words++;
-            if (wordMap.find(word) != wordMap.end()) {
-                english++;
-            }
-        }
+        // Get the counts
+        counts = countWords(line);
     }
-    // Add the counts to argv
-    list[index-2] += ' ' + words + ' ' + english;
+    // Concatenate the string containing url and counts
+    data.at(index-2) = "http://" + host + "/" + url + ' ' + 
+            to_string(counts.first) + ' ' + to_string(counts.second);
     return 0;
 }  // End of the 'scrapeUrl' method
 
@@ -158,15 +149,12 @@ int scrapeUrl(StrVec& list, int index) {
 /**
  * A helper method that will print out all of the counts in the order that the 
  * url were supplied in.  
- * 
- * @param list Argv from main.  It will contain the counts like 
- *             "url word_count English_count".  *Without the quotes.
  */
-void printCounts(StrVec& list) {
-    for (size_t i = 2; i < list.size(); i++) {
-        stringstream ss(list[i]);
-        string url;
-        int wordCount, englishCount;
+void printCounts() {
+    for (size_t i = 0; i < data.size(); i++) {
+        stringstream ss(data[i]);
+        string url, wordCount, englishCount;
+//        int wordCount, englishCount;
         ss >> url >> wordCount >> englishCount;
         cout << "URL: " << url;
         cout << ", words: " << wordCount;
@@ -174,12 +162,39 @@ void printCounts(StrVec& list) {
     }
 }  // End of the 'printCounts' method
 
+/**
+ * A helper method that will count the number of words and English words in a 
+ * string.
+ * 
+ * @param line A string that needs the words counted.
+ * @return A pair containing the count of words and English words.  They will 
+ *         be formatted as "words, English words"
+ */
+pair<int, int> countWords(string line) {
+    int wordsCnt = 0, englishCnt = 0;
+    // Strip out punctuation
+    std::replace_if(line.begin(), line.end(), ::ispunct, ' ');      
+    // Iterate through each word in a line
+    string word;
+    stringstream ss(line);
+    while (ss >> word) {
+        // Convert to lowercase
+        std::transform(word.begin(), word.end(), word.begin(), ::tolower);
+        wordsCnt++;
+        if (wordMap.find(word) != wordMap.end()) {
+            englishCnt++;
+        }
+    }
+    pair<int, int> counts(wordsCnt, englishCnt);
+    return counts;
+}  // End of the 'countWords' method
+
 
 /*
  * 
  */
 int main(int argc, char** argv) {
-    StrVec data;
+//    StrVec data;
     // Fill the word map
     initWordMap();
 
@@ -193,9 +208,9 @@ int main(int argc, char** argv) {
     }
 
     
-    int status = scrapeUrl(data, 2);
+    int status = scrapeUrl(2);
 //    // Print out the counts
-//    printCounts(data);
+    printCounts();
     return 0;
 }
 
