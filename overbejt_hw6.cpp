@@ -191,7 +191,6 @@ pair<int, int> countWords(string line) {
  * A helper method to manage the threads.
  */
 void thrdMain() {
-    
 }  // End of the 'thrdMain' method
 
 
@@ -199,7 +198,10 @@ void thrdMain() {
  * 
  */
 int main(int argc, char** argv) {
-//    StrVec data;
+    // Run Thread Main
+    int thrCnt = atoi(argv[1]);
+    thrdMain(thrCnt);
+    
     // Fill the word map
     initWordMap();
 
