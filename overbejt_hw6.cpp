@@ -42,8 +42,7 @@ void initWordMap();
 int scrapeUrl(int index);
 void printCounts();
 pair<int, int> countWords(string line);
-//  bool setupHttpStream(tcp::iostream& stream, const std::string& path,
-//                     const std::string& host = "ceclnx01.cec.miamioh.edu");
+void thrdMain();
 
 /**
  * Helper method to create an TCP I/O stream to send an HTTP request
@@ -187,6 +186,13 @@ pair<int, int> countWords(string line) {
     pair<int, int> counts(wordsCnt, englishCnt);
     return counts;
 }  // End of the 'countWords' method
+
+/**
+ * A helper method to manage the threads.
+ */
+void thrdMain() {
+    
+}  // End of the 'thrdMain' method
 
 
 /*
