@@ -59,7 +59,6 @@ pair<int, int> countWords(string line);
  */
 bool setupHttpStream(tcp::iostream& stream, const std::string& path,
                      const std::string& host = "ceclnx01.miamioh.edu") {
-    cout << "URL: " << host + path << endl;  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     // Establish a TCP connection to the given web server at port
     // number 80.
     stream.connect(host, "80");
@@ -134,14 +133,17 @@ int scrapeUrl(int index) {
     }
     // Iterate through each line in the web page
     string line;
+    int wordCt = 0, englishCt = 0;
     pair<int, int> counts;
     while (stream >> line) {
         // Get the counts
         counts = countWords(line);
+        wordCt += counts.first;
+        englishCt += counts.second;
     }
     // Concatenate the string containing url and counts
     data.at(index-2) = "http://" + host + "/" + url + ' ' + 
-            to_string(counts.first) + ' ' + to_string(counts.second);
+            to_string(wordCt) + ' ' + to_string(englishCt);
     return 0;
 }  // End of the 'scrapeUrl' method
 
