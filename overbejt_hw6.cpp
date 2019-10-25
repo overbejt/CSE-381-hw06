@@ -200,18 +200,20 @@ int main(int argc, char** argv) {
     // Fill the word map
     initWordMap();
 
-    // Scrape the url
+    // Fill the vector with he URLs
     for (int i = 2; i < argc; i++) {
         string meh = argv[i];
         data.push_back(argv[i]);
     }
+    // Debuging -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (auto b : data) {
         cout << b << endl;
     }
-
+    // Scrape the URLs
     for (int i = 2; i < argc; ++i) {
         int status = scrapeUrl(i);
     }
+    
     // Print out the counts
     printCounts();
     return 0;
