@@ -107,16 +107,13 @@ void initWordMap() {
     while (is >> word) {
         wordMap.insert({word, word});
     }
-    cout << "WordMap initialized." << endl;
+    cout << "WordMap initialized." << endl;  // Debuging -=-=-=-=-=-=-=-=-=-=-=-
 }  // End of the 'initWordMap' method
 
 
 /**
  * This is a helper method that will scrape the content from a given Url.  
  * It will count the words, and it will count the English words.
- * 
- * @param list Argv from main, put the counts in the order 
- *             (url word_count English_count).  *Without the parenthesis.
  * 
  * @param url A url that needs to be scrapped.
  */
