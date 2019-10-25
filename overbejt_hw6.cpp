@@ -32,6 +32,7 @@ using namespace boost::asio::ip;
 //  using TcpStreamPtr = std::shared_ptr<tcp::iostream>;
 using WordMap = std::unordered_map<std::string, std::string>;
 using StrVec = std::vector<std::string>;
+using ThrVec = std::vector<std::thread>;
 
 // Declaring a global variables
 WordMap wordMap;
@@ -138,7 +139,7 @@ int scrapeUrl(int index) {
         englishCt += counts.second;
     }
     // Concatenate the string containing url and counts
-    data.at(index-2) = "http://" + host + "/" + url + ' ' + 
+    data.at(index-2) = "http://" + host + "/" + path + ' ' + 
             to_string(wordCt) + ' ' + to_string(englishCt);
     return 0;
 }  // End of the 'scrapeUrl' method
@@ -190,18 +191,16 @@ pair<int, int> countWords(string line) {
 /**
  * A helper method to manage the threads.
  */
-void thrdMain() {
+void thrdMain(int thrdCnt) {
+    ThrVec thrList;
+//    
 }  // End of the 'thrdMain' method
 
 
 /*
  * 
  */
-int main(int argc, char** argv) {
-    // Run Thread Main
-    int thrCnt = atoi(argv[1]);
-    thrdMain(thrCnt);
-    
+int main(int argc, char** argv) {        
     // Fill the word map
     initWordMap();
 
@@ -214,6 +213,11 @@ int main(int argc, char** argv) {
     for (auto b : data) {
         cout << b << endl;
     }
+    
+    // Run Thread Main
+    int thrCnt = atoi(argv[1]);
+    thrdMain(thrCnt);
+    
     // Scrape the URLs
     for (int i = 2; i < argc; ++i) {
         int status = scrapeUrl(i);
