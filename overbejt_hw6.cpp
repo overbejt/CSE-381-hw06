@@ -34,10 +34,10 @@ WordMap wordMap;
 StrVec data;
 
 // Prototyping methods
-void initWordMap();
-void scrapeUrl(int index);
-void printCounts();
 pair<int, int> countWords(string line);
+void initWordMap();
+void printCounts();
+void scrapeUrl(int index);
 void thrdMain(int thrdCnt);
 void thrdSet(ThrVec& threads, int interval, int begin);
 
