@@ -31,11 +31,11 @@
 1 ex3.html</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" 1 ex3.html</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" 1 ex3.html cpp.txt</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" 2 ex3.html cpp.txt us_constitution.txt miami_university.txt</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" 1 ex3.html cpp.txt us_constitution.txt miami_university.txt</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" 3 ex3.html cpp.txt us_constitution.txt miami_university.txt</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" 2 ex3.html cpp.txt us_constitution.txt miami_university.txt</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" 3 ex3.html cpp.txt us_constitution.txt miami_university.txt</runcommand>
+        <runcommand>"${OUTPUT_PATH}" 2 ex3.html cpp.txt us_constitution.txt miami_university.txt</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>
