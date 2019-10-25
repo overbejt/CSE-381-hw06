@@ -207,11 +207,13 @@ void thrdSet(ThrVec& threads, int interval, int begin) {
  * @param thrdCnt A count of the threads to use.
  */
 void thrdMain(int thrdCnt) {
+    // Get the data size as int to avoid warnings
+    int datSize = static_cast<int>(data.size());
     if (thrdCnt > 1) {
-        ThrVec thrList;
+        ThrVec thrList;        
         // 1.) Find the interval for each thread to work on.
-        int interval = data.size() / thrdCnt;
-        int remainder = data.size() % thrdCnt;
+        int interval = datSize / thrdCnt;
+        int remainder = datSize % thrdCnt;
         // 2.) Loop and thread. 
         int start = 0;
         for (int i = 0; i < thrdCnt; ++i) {
@@ -229,7 +231,7 @@ void thrdMain(int thrdCnt) {
         }
     } else {
         // Scrape the URLs, single thread
-        for (int i = 0; i < data.size(); ++i) {
+        for (int i = 0; i < datSize; ++i) {
             scrapeUrl(i);
         }
     }
