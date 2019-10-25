@@ -199,16 +199,18 @@ pair<int, int> countWords(string line) {
 void thrdSet(ThrVec& threads, int interval, int begin) {
     cout << "Running thrdSet" << endl;
     // Avoid index out of bounds exception
-    int end;
-    if (interval + begin < data.size()) {
-        end = interval + begin;
-    } else {
-        end = data.size() - begin;
-    }
+    int end = interval + begin;
+//    if (interval + begin < data.size()) {
+//        end = interval + begin;
+//    } else {
+//        end = data.size() - begin;
+//    }
     // Loop and make threads work
-    for (int i = 0; i < end; ++i) {
+    int increment = 0;
+    for (int i = begin; i < end; ++i) {
         cout << "thrdSet i = " << i << endl;
-        threads.push_back(thread(scrapeUrl, (begin + i)));
+        threads.push_back(thread(scrapeUrl, (begin + increment)));
+        increment++;
     }
     cout << "Finished thrdSet" << endl;
 }  // End of the 'thrdSet' method
@@ -224,11 +226,16 @@ void thrdMain(int thrdCnt) {
         ThrVec thrList;
         // Todo: 
         // 1.) Find the interval for each thread to work on.
-//        int interval = thrdCnt - 1;
+//        int interval = data.size() / thrdCnt - 1;
         int interval = data.size() / thrdCnt;
+        int remainder = data.size() % thrdCnt;
         // 2.) Loop and thread. 
         int start = 0;
         for (int i = 0; i < thrdCnt; ++i) {
+//            interval = (i == thrdCnt - 1) ? interval + remainder : interval;
+            if (i == thrdCnt - 1) {
+                interval = interval + remainder;
+            }
             thrdSet(thrList, interval, start);
             start += interval;
         }
