@@ -201,7 +201,8 @@ void thrdSet(ThrVec& threads, int interval, int begin) {
 }  // End of the 'thrdSet' method
 
 /**
- * A helper method to manage the threads.
+ * A helper method to manage the threads.  It is in charge of delegating which 
+ * part of the url list each thread will work on.  
  * 
  * @param thrdCnt A count of the threads to use.
  */
