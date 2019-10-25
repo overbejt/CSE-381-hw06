@@ -209,9 +209,10 @@ int main(int argc, char** argv) {
         cout << b << endl;
     }
 
-    
-    int status = scrapeUrl(2);
-//    // Print out the counts
+    for (int i = 2; i < argc; ++i) {
+        int status = scrapeUrl(i);
+    }
+    // Print out the counts
     printCounts();
     return 0;
 }
