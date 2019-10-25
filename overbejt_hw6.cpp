@@ -37,7 +37,7 @@ WordMap wordMap;
 
 // Prototyping methods
 void initWordMap();
-void scrapeUrl(StrVec& dat, int index);
+int scrapeUrl(StrVec& dat, int index);
 void printCounts(StrVec& dat);
 //  bool setupHttpStream(tcp::iostream& stream, const std::string& path,
 //                     const std::string& host = "ceclnx01.cec.miamioh.edu");
@@ -55,7 +55,8 @@ void printCounts(StrVec& dat);
  * host is currently assumed to be ceclnx01.cec.miamioh.edu.
  */
 bool setupHttpStream(tcp::iostream& stream, const std::string& path,
-                     const std::string& host = "ceclnx01.cec.miamioh.edu") {
+                     const std::string& host = "ceclnx01.miamioh.edu") {
+    cout << "URL: " << host + path << endl;
     // Establish a TCP connection to the given web server at port
     // number 80.
     stream.connect(host, "80");
@@ -117,17 +118,19 @@ void initWordMap() {
  * 
  * @param url A url that needs to be scrapped.
  */
-void scrapeUrl(StrVec& list, int index) {
+int scrapeUrl(StrVec& list, int index) {
     // local variables
     int words = 0, english = 0;
     string url = list.at(index-2);
     tcp::iostream stream;
     // Update path to web page
-    string path = "~raodm/cse381/ex6/SlowGet.cgi?file=" + url;
-    if (!setupHttpStream(stream, path)) {
+//    string path = "~raodm/cse381/ex6/SlowGet.cgi?file=" + url;
+    string host = "os1.csi.miamioh.edu";
+    string path = "~raodm/cse381/hw6/SlowGet.cgi?file=" + url;
+    if (!setupHttpStream(stream, path, host)) {
         // Something went wrong in getting the data from the server.
         std::cout << "Error obtaining data from server.\n";
-//        return 1;  // Unsuccessful run of program (non-zero exit code)
+        return 1;  // Unsuccessful run of program (non-zero exit code)
     }
     // Iterate through each line in the web page
     string line;
@@ -148,6 +151,7 @@ void scrapeUrl(StrVec& list, int index) {
     }
     // Add the counts to argv
     list[index-2] += ' ' + words + ' ' + english;
+    return 0;
 }  // End of the 'scrapeUrl' method
 
 
@@ -178,22 +182,18 @@ int main(int argc, char** argv) {
     StrVec data;
     // Fill the word map
     initWordMap();
-//    for (size_t i = 0; i < argc; i++) {
-//        cout << argv[i] << endl;
-//    }
+
     // Scrape the url
-    for (size_t i = 2; i < argc; i++) {
+    for (int i = 2; i < argc; i++) {
         string meh = argv[i];
         data.push_back(argv[i]);
     }
     for (auto b : data) {
         cout << b << endl;
     }
-//    cout << argv[0] << endl;
-//    cout << argv[1] << endl;
-//    cout << argv[2] << endl;
+
     
-//    scrapeUrl(data, 2);
+    int status = scrapeUrl(data, 2);
 //    // Print out the counts
 //    printCounts(data);
     return 0;
